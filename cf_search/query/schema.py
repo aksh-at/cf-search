@@ -48,10 +48,19 @@ CF_SCHEMA_TEXT = (
     + """
 
 type Contest {
+    id: Int
     name: String
     phase: String
+
+    out_Contest_Submission: [Submission]
 }
 
+type Submission {
+   id: Int
+   programmingLanguage: String
+   verdict: String
+   source: String
+}
 
 type RootSchemaQuery {
     Contest: [Contest]

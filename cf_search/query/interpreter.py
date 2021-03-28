@@ -5,6 +5,7 @@ from graphql_compiler.interpreter.typedefs import EdgeInfo
 
 from .data_manager import (
     CfDataManager,
+    get_submissions_for_contest,
 )
 from .tokens import CfToken
 
@@ -43,6 +44,7 @@ class CfDataAdapter(InterpreterAdapter[CfToken]):
         **hints: Dict[str, Any],
     ) -> Iterable[Tuple[DataContext[CfToken], Iterable[CfToken]]]:
         edge_handlers = {
+            ("Contest", ("out", "Contest_Submission")): get_submissions_for_contest,
         }
 
         handler_key = (current_type_name, edge_info)

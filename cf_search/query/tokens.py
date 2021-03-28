@@ -11,7 +11,18 @@ def make_contest_token(raw_data) -> Optional[CfToken]:
     type_name = "Contest"
 
     content: Dict[str, Any] = {
-        "name": raw_data["name"]
+        "id": raw_data["id"],
+        "name": raw_data["name"],
+    }
+
+    return CfToken(type_name, content)
+
+def make_submission_token(raw_data) -> Optional[CfToken]:
+    type_name = "Submission"
+
+    content: Dict[str, Any] = {
+        "id": raw_data["id"],
+        "programmingLanguage": raw_data["programmingLanguage"],
     }
 
     return CfToken(type_name, content)
