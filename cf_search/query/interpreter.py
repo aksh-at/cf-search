@@ -3,11 +3,9 @@ from typing import Any, Dict, Iterable, Set, Tuple
 from graphql_compiler.interpreter import DataContext, InterpreterAdapter
 from graphql_compiler.interpreter.typedefs import EdgeInfo
 
-from .data_manager import (
-    CfDataManager,
-    get_submissions_for_contest,
-)
+from .data_manager import CfDataManager
 from .tokens import CfToken
+
 
 class CfDataAdapter(InterpreterAdapter[CfToken]):
     data_manager: CfDataManager
@@ -15,7 +13,9 @@ class CfDataAdapter(InterpreterAdapter[CfToken]):
     def __init__(self) -> None:
         self.data_manager = CfDataManager()
 
-    def get_tokens_of_type(self, type_name: str, **hints: Dict[str, Any]) -> Iterable[CfToken]:
+    def get_tokens_of_type(
+        self, type_name: str, **hints: Dict[str, Any]
+    ) -> Iterable[CfToken]:
         if type_name == "Contest":
             return self.data_manager.contests
         else:
@@ -44,7 +44,14 @@ class CfDataAdapter(InterpreterAdapter[CfToken]):
         **hints: Dict[str, Any],
     ) -> Iterable[Tuple[DataContext[CfToken], Iterable[CfToken]]]:
         edge_handlers = {
-            ("Contest", ("out", "Contest_Submission")): get_submissions_for_contest,
+            (
+                "Contest",
+                ("out", "Contest_Submission"),
+            ): self.data_manager.get_submissions_for_contest,
+            (
+                "Submission",
+                ("out", "Submission_Source"),
+            ): self.data_manager.get_source_for_submission,
         }
 
         handler_key = (current_type_name, edge_info)
@@ -57,7 +64,7 @@ class CfDataAdapter(InterpreterAdapter[CfToken]):
 
                 neighbors = []
                 if token is not None:
-                    neighbors = handler_for_edge(self.data_manager, token)
+                    neighbors = handler_for_edge(token)
 
                 yield (data_context, neighbors)
 
@@ -71,8 +78,7 @@ class CfDataAdapter(InterpreterAdapter[CfToken]):
         # Tuple (current_known_type, attempted_coercion_type) -> set of concrete types for which
         # the coercion is successful. The attempted coercion type may be concrete or abstract;
         # if abstract then all concrete types that are descended from it are in the value set.
-        coercion_table: Dict[Tuple[str, str], Set[str]] = {
-        }
+        coercion_table: Dict[Tuple[str, str], Set[str]] = {}
 
         for data_context in data_contexts:
             token = data_context.current_token

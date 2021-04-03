@@ -57,9 +57,15 @@ type Contest {
 
 type Submission {
    id: Int
-   programmingLanguage: String
+   contest_id: Int
+   programming_language: String
    verdict: String
-   source: String
+
+   out_Submission_Source: [Source]
+}
+
+type Source {
+   source_code: String
 }
 
 type RootSchemaQuery {

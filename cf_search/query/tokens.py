@@ -1,13 +1,15 @@
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Dict
+
 
 @dataclass
 class CfToken:
     type_name: str
     content: Dict[str, Any]  # field values
-    #foreign_keys: Dict[str, List[Any]]  # values that help us look up neighbors
+    # foreign_keys: Dict[str, List[Any]]  # values that help us look up neighbors
 
-def make_contest_token(raw_data) -> Optional[CfToken]:
+
+def make_contest_token(raw_data) -> CfToken:
     type_name = "Contest"
 
     content: Dict[str, Any] = {
@@ -17,12 +19,25 @@ def make_contest_token(raw_data) -> Optional[CfToken]:
 
     return CfToken(type_name, content)
 
-def make_submission_token(raw_data) -> Optional[CfToken]:
+
+def make_submission_token(raw_data) -> CfToken:
     type_name = "Submission"
 
     content: Dict[str, Any] = {
         "id": raw_data["id"],
-        "programmingLanguage": raw_data["programmingLanguage"],
+        "contest_id": raw_data["contestId"],
+        "verdict": raw_data["verdict"],
+        "programming_language": raw_data["programmingLanguage"],
+    }
+
+    return CfToken(type_name, content)
+
+
+def make_source_token(source_code) -> CfToken:
+    type_name = "Source"
+
+    content: Dict[str, Any] = {
+        "source_code": source_code,
     }
 
     return CfToken(type_name, content)
