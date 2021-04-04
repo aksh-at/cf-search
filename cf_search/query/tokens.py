@@ -46,6 +46,7 @@ def make_submission_token(raw_data) -> CfToken:
     content: Dict[str, Any] = {
         "id": raw_data["id"],
         "contest_id": raw_data["contestId"],
+        "index": raw_data["problem"]["index"],
         "verdict": raw_data["verdict"],
         "programming_language": raw_data["programmingLanguage"],
     }

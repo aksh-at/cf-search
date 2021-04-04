@@ -54,6 +54,10 @@ class CfDataAdapter(InterpreterAdapter[CfToken]):
                 "Submission",
                 ("out", "Submission_Source"),
             ): self.data_manager.get_source_for_submission,
+            (
+                "Submission",
+                ("in", "Submission_Problem"),
+            ): self.data_manager.get_problem_for_submission,
         }
 
         handler_key = (current_type_name, edge_info)

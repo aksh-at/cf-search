@@ -49,6 +49,17 @@ class CfDataManager:
 
         return self.submission_source[submission_id]
 
+    def get_problem_for_submission(self, token: CfToken):
+        assert token.type_name == "Submission"
+
+        index = token.content["index"]
+        contest_id = token.content["contest_id"]
+
+        def filter_fn(p):
+            return p.content["index"] == index and p.content["contest_id"] == contest_id
+
+        return filter(filter_fn, self.problems)
+
 
 def _fetch_contests() -> List[CfToken]:
     response = requests.get("https://codeforces.com/api/contest.list").json()

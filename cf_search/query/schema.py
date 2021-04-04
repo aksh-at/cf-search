@@ -67,10 +67,12 @@ type Problem {
 type Submission {
    id: Int
    contest_id: Int
+   index: String
    programming_language: String
    verdict: String
 
    out_Submission_Source: [Source]
+   in_Submission_Problem: [Problem]
 }
 
 type Source {
