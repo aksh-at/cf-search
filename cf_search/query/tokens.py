@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, Dict
+from typing import Any, Dict, Tuple
 
 
 @dataclass
@@ -15,6 +15,26 @@ def make_contest_token(raw_data) -> CfToken:
     content: Dict[str, Any] = {
         "id": raw_data["id"],
         "name": raw_data["name"],
+    }
+
+    return CfToken(type_name, content)
+
+
+def make_problem_token(raw_inputs: Tuple[Any, Any]) -> CfToken:
+    (problem_data, problem_stats) = raw_inputs
+
+    assert problem_data["contestId"] == problem_stats["contestId"]
+    assert problem_data["index"] == problem_stats["index"]
+
+    type_name = "Problem"
+
+    content: Dict[str, Any] = {
+        "contest_id": problem_data["contestId"],
+        "index": problem_data["index"],
+        "name": problem_data["name"],
+        "rating": problem_data.get("rating", None),
+        "tags": problem_data["tags"],
+        "solved_count": problem_stats["solvedCount"],
     }
 
     return CfToken(type_name, content)

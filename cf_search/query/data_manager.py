@@ -4,6 +4,7 @@ from lxml import html
 from typing import List, Dict
 from .tokens import (
     make_contest_token,
+    make_problem_token,
     make_submission_token,
     make_source_token,
     CfToken,
@@ -12,11 +13,14 @@ from .tokens import (
 
 class CfDataManager:
     contests: List[CfToken]
+    problems: List[CfToken]
     contest_submissions: Dict[str, List[CfToken]]
     submission_source: Dict[str, List[CfToken]]
+    users: Dict[str, List[CfToken]]
 
     def __init__(self) -> None:
         self.contests = _fetch_contests()
+        self.problems = _fetch_problems()
         self.contest_submissions = {}
         self.submission_source = {}
 
@@ -46,9 +50,19 @@ class CfDataManager:
         return self.submission_source[submission_id]
 
 
-def _fetch_contests():
+def _fetch_contests() -> List[CfToken]:
     response = requests.get("https://codeforces.com/api/contest.list").json()
     return list(map(make_contest_token, response["result"]))
+
+
+def _fetch_problems() -> List[CfToken]:
+    response = requests.get("https://codeforces.com/api/problemset.problems").json()
+
+    zipped = zip(
+        response["result"]["problems"], response["result"]["problemStatistics"]
+    )
+
+    return list(map(make_problem_token, zipped))
 
 
 def _fetch_submissions_for_contest(contest_id: int) -> List[CfToken]:

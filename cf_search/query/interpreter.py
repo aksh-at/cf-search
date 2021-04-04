@@ -18,6 +18,8 @@ class CfDataAdapter(InterpreterAdapter[CfToken]):
     ) -> Iterable[CfToken]:
         if type_name == "Contest":
             return self.data_manager.contests
+        if type_name == "Problem":
+            return self.data_manager.problems
         else:
             raise NotImplementedError()
 

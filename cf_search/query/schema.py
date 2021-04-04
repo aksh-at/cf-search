@@ -55,6 +55,15 @@ type Contest {
     out_Contest_Submission: [Submission]
 }
 
+type Problem {
+    contest_id: Int
+    index: String
+    name: String
+    rating: Int
+    tags: [String]
+    solved_count: Int
+}
+
 type Submission {
    id: Int
    contest_id: Int
@@ -70,6 +79,7 @@ type Source {
 
 type RootSchemaQuery {
     Contest: [Contest]
+    Problem: [Problem]
 }
 """
 )
