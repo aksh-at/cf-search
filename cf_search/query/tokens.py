@@ -54,11 +54,29 @@ def make_submission_token(raw_data) -> CfToken:
     return CfToken(type_name, content)
 
 
-def make_source_token(source_code) -> CfToken:
+def make_source_token(source_code, root_node) -> CfToken:
     type_name = "Source"
 
     content: Dict[str, Any] = {
         "source_code": source_code,
+        # not exposed in the schema
+        "root_node": root_node,
+    }
+
+    return CfToken(type_name, content)
+
+
+def make_node_token(node, src) -> CfToken:
+    type_name = "Node"
+
+    node_content = src[node.start_byte:node.end_byte]
+
+    content: Dict[str, Any] = {
+        "type": node.type,
+        "content": node_content,
+        # not exposed in the schema
+        "node": node,
+        "src": src,
     }
 
     return CfToken(type_name, content)

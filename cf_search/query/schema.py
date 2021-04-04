@@ -77,6 +77,15 @@ type Submission {
 
 type Source {
    source_code: String
+
+   out_Source_Children: [Node]
+}
+
+type Node {
+    type: String
+    content: String
+
+   out_Node_Children: [Node]
 }
 
 type RootSchemaQuery {

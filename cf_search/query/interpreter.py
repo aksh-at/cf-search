@@ -58,6 +58,14 @@ class CfDataAdapter(InterpreterAdapter[CfToken]):
                 "Submission",
                 ("in", "Submission_Problem"),
             ): self.data_manager.get_problem_for_submission,
+            (
+                "Source",
+                ("out", "Source_Children"),
+            ): self.data_manager.get_children_for_source,
+            (
+                "Node",
+                ("out", "Node_Children"),
+            ): self.data_manager.get_children_for_node,
         }
 
         handler_key = (current_type_name, edge_info)
